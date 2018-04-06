@@ -1,0 +1,64 @@
+version: '3'
+services:
+  parity:
+    image: parity
+    command: ["--chain", "kovan", "--db-path", "/chain-data/", "--ui-interface", "0.0.0.0", "--ws-interface", "0.0.0.0", "--ws-origins", "all", "--jsonrpc-hosts", "all", "--unsafe-expose", "--jsonrpc-interface", "0.0.0.0", "--force-ui", "--min-peers", "5", "--max-peers", "10", "--cache-size", "2048", "-d", "/keys-store/"]
+    build:
+      context: ./parity/
+    ports:
+      - "8545:8545"
+      - "8546:8546"
+      - "8080:8080"
+      - "8180:8180"
+    restart: always
+    volumes:
+      - parity-db-kovan:/chain-data/
+      - parity-keystore:/keys-store/
+    networks:
+      app_net:
+  ipfs:
+    image: ipfs
+    command: ["--enable-pubsub-experiment", "--writable", "--unrestricted-api"]
+    build:
+      context: ./go-ipfs/
+    ports:
+      - "4001:4001"
+      - "5001:5001"
+      - "7080:8080"
+      - "7081:8081"
+    restart: always
+    networks:
+      app_net:
+        ipv4_address: 172.18.18.2 # Temp fix, since go-ipfs does not accept URL as an API argument
+  aira-comm-1:
+    image: robonomics-comm
+    build:
+      context: ./aira-comm/
+    restart: always
+    depends_on:
+      - parity
+      - ipfs
+    networks:
+      app_net:
+  custom-pack:
+    image: custom-pack
+    build:
+      context: ./custom-pack/
+    restart: always
+    depends_on:
+      - parity
+      - ipfs
+    networks:
+      app_net:
+volumes:
+  parity-db-kovan:
+  parity-keystore:
+networks:
+  app_net:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.18.18.0/24

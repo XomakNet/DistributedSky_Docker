@@ -1,0 +1,3 @@
+[submodule "aira-comm/robonomics_comm"]
+	path = aira-comm/robonomics_comm
+	url = https://github.com/XomakNet/robonomics_comm.git
