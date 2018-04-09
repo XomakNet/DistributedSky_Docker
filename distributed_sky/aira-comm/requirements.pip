@@ -6,3 +6,4 @@ web3==4.0.0
 pexpect==4.4.0
 rospkg==1.1.4
 catkin_pkg==0.4.1
+ipfsapi==0.4.2
