@@ -45,6 +45,8 @@ services:
     build:
       context: ./custom-pack/
     restart: always
+    ports:
+      - "3122:22"
     depends_on:
       - parity
       - ipfs

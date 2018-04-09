@@ -1,6 +1,17 @@
 FROM ros:lunar-ros-base
 RUN apt-get update && apt-get install -y python3 python3-pip wget
 
+######################################### ONLY FOR DEVELOPMENT ########################################################### 
+RUN apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
+RUN echo 'root:screencast' | chpasswd
+RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+RUN service ssh start
+EXPOSE 22
+######################################### ONLY FOR DEVELOPMENT ########################################################### 
+
 # IPFS. Intentionally 0.4.13 version because of problems with pubsub in 0.4.14
 WORKDIR /tmp
 RUN wget https://dist.ipfs.io/go-ipfs/v0.4.13/go-ipfs_v0.4.13_linux-amd64.tar.gz
