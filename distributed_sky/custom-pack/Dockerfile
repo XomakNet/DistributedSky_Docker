@@ -1,7 +1,7 @@
 FROM robonomics-comm
 
 # Distributed sky package
-RUN apt-get install ros-lunar-geographic-msgs
+RUN apt-get install -y ros-lunar-geographic-msgs
 WORKDIR /
 RUN mkdir -p /opt/ros_ws/distributed_sky/src/
 WORKDIR /opt/ros_ws/distributed_sky/src/
