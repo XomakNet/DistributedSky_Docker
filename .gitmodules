@@ -1,6 +1,6 @@
 [submodule "aira-comm/robonomics_comm"]
-	path = distributed_sky/aira-comm/robonomics_comm
+	path = distributed_sky/robonomics-comm/robonomics_comm
 	url = https://github.com/XomakNet/robonomics_comm.git
 [submodule "distributed_sky/custom-pack/distributed_sky"]
-	path = distributed_sky/custom-pack/distributed_sky
+	path = distributed_sky/distributed-sky/distributed_sky_ros
 	url = https://github.com/XomakNet/DistributedSky_ROS.git
