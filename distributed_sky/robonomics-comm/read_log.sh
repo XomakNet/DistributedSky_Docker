@@ -1,3 +1,3 @@
 #!/bin/bash
-source /opt/ros_ws/distributed_sky/devel/setup.bash
+source "$WS_SOURCE_PATH"
 rostopic echo /rosout_agg | grep -E "msg: .*"

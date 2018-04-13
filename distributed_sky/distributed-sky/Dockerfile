@@ -12,7 +12,5 @@ RUN [ "/bin/bash", "-c", "source /opt/ros/lunar/setup.bash && source $WS_SOURCE_
 ENV WS_SOURCE_PATH /opt/ros_ws/distributed_sky/devel/setup.bash
 
 WORKDIR /
-COPY read_log.sh .
-RUN chmod +x ./read_log.sh
 
 CMD [ "roslaunch", "dsky_main", "test.launch" ]

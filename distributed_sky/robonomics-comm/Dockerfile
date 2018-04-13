@@ -34,6 +34,10 @@ ENV WS_SOURCE_PATH /opt/ros_ws/aira_ws/devel/setup.bash
 
 # Entry point
 WORKDIR /
+
+COPY read_log.sh .
+RUN chmod +x ./read_log.sh
+
 COPY ros_entrypoint.sh .
 RUN chmod +x ros_entrypoint.sh
 ENTRYPOINT [ "/ros_entrypoint.sh"]
