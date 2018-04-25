@@ -1,5 +1,10 @@
 FROM robonomics-comm
 
+# PIP requirements
+RUN pip3 install --upgrade pip
+COPY requirements.pip .
+RUN pip3 install -r requirements.pip && rm requirements.pip
+
 # Distributed sky package
 RUN apt-get install -y ros-lunar-geographic-msgs
 WORKDIR /
@@ -13,4 +18,5 @@ ENV WS_SOURCE_PATH /opt/ros_ws/distributed_sky/devel/setup.bash
 
 WORKDIR /
 
+RUN echo "source $WS_SOURCE_PATH" > /root/.bashrc
 CMD [ "roslaunch", "dsky_main", "test.launch" ]
