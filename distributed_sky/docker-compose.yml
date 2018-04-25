@@ -4,7 +4,7 @@ services:
     image: parity
     env_file:
      - ./.env
-    command: ["--chain", "kovan", "--db-path", "/chain-data/", "--ui-interface", "0.0.0.0", "--ws-interface", "0.0.0.0", "--ws-origins", "all", "--jsonrpc-hosts", "all", "--unsafe-expose", "--jsonrpc-interface", "0.0.0.0", "--force-ui", "--min-peers", "5", "--max-peers", "10", "--cache-size", "2048", "-d", "/keys-store/", "--unlock", "${ETH_ADDRESS_UAV},${ETH_ADDRESS_ASP_TATARSTAN},${ETH_LIGHTHOUSE_ADDRESS}", "--password", "/unlock_password.txt"]
+    command: ["--chain", "kovan", "--db-path", "/chain-data/", "--ui-interface", "0.0.0.0", "--ws-interface", "0.0.0.0", "--ws-origins", "all", "--jsonrpc-hosts", "all", "--unsafe-expose", "--jsonrpc-interface", "0.0.0.0", "--force-ui", "--min-peers", "10", "--max-peers", "15", "--cache-size", "2048", "-d", "/keys-store/", "--unlock", "${ETH_ADDRESS_UAV},${ETH_ADDRESS_ASP_TATARSTAN},${ETH_LIGHTHOUSE_ADDRESS}", "--password", "/unlock_password.txt"]
     build:
       context: ./parity/
       args:
@@ -57,7 +57,10 @@ services:
         ipv4_address: 172.18.18.5 # Temp fix, since go-ipfs does not accept URL as an API argument
   uav:
     image: distributed-sky
-    command: ["roslaunch", "distributed_sky_uav", "test_ask_send.launch", "lighthouse_contract:=${LIGHTHOUSE_CONTRACT}", "eth_account_address:=${ETH_ADDRESS_UAV}"]
+    command: ["roslaunch", "distributed_sky_uav", "confirmer_infrastructure.launch", "lighthouse_contract:=${LIGHTHOUSE_CONTRACT}", "eth_account_address:=${ETH_ADDRESS_UAV}"]
+    depends_on:
+      - parity
+      - ipfs
     ports:
       - "3122:22"
     networks:
@@ -65,7 +68,10 @@ services:
         ipv4_address: 172.18.18.6 # Temp fix, since go-ipfs does not accept URL as an API argument
   tatarstan-asp:
     image: distributed-sky
-    command: ["roslaunch", "airspace_service_provider", "test.launch", "lighthouse_contract:=${LIGHTHOUSE_CONTRACT}", "eth_account_address:=${ETH_ADDRESS_ASP_TATARSTAN}"]
+    command: ["roslaunch", "--master-logger-level=debug", "airspace_service_provider", "test.launch", "lighthouse_contract:=${LIGHTHOUSE_CONTRACT}", "eth_account_address:=${ETH_ADDRESS_ASP_TATARSTAN}"]
+    depends_on:
+      - parity
+      - ipfs
     ports:
       - "3222:22"
     networks:
@@ -74,6 +80,9 @@ services:
   lighthouse:
     image: robonomics-comm
     command: ["roslaunch", "robonomics_lighthouse", "lighthouse.launch", "lighthouse_contract:=${LIGHTHOUSE_CONTRACT}", "web3_http_provider:=http://parity:8545", "ipfs_http_provider:=http://172.18.18.2:5001", "eth_account_address:=${ETH_LIGHTHOUSE_ADDRESS}"]
+    depends_on:
+      - parity
+      - ipfs
     ports:
       - "3322:22"
     networks:
