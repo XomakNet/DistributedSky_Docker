@@ -4,7 +4,7 @@ services:
     image: parity
     env_file:
      - ./.env
-    command: ["--chain", "kovan", "--db-path", "/chain-data/", "--ui-interface", "0.0.0.0", "--ws-interface", "0.0.0.0", "--ws-origins", "all", "--jsonrpc-hosts", "all", "--unsafe-expose", "--jsonrpc-interface", "0.0.0.0", "--force-ui", "--min-peers", "10", "--max-peers", "15", "--cache-size", "2048", "-d", "/keys-store/", "--unlock", "${ETH_ADDRESS_UAV},${ETH_ADDRESS_ASP_TATARSTAN},${ETH_LIGHTHOUSE_ADDRESS}", "--password", "/unlock_password.txt"]
+    command: ["--chain", "kovan", "--db-path", "/chain-data/", "--ui-interface", "0.0.0.0", "--ws-interface", "0.0.0.0", "--ws-origins", "all", "--jsonrpc-hosts", "all", "--unsafe-expose", "--jsonrpc-interface", "0.0.0.0", "--force-ui", "--min-peers", "10", "--max-peers", "15", "--cache-size", "2048", "-d", "/keys-store/", "--unlock", "${ETH_ADDRESS_UAV},${ETH_ADDRESS_ASP_TATARSTAN},${ETH_LIGHTHOUSE_ADDRESS},${ETH_ADDRESS_ASP_MARIY_EL},${ETH_ADDRESS_ASP_KIROV}", "--password", "/unlock_password.txt"]
     build:
       context: ./parity/
       args:
