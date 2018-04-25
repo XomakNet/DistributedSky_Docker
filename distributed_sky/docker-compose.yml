@@ -88,6 +88,28 @@ services:
     networks:
       app_net:
         ipv4_address: 172.18.18.8 # Temp fix, since go-ipfs does not accept URL as an API argument
+  mariy-el-asp:
+    image: distributed-sky
+    command: ["roslaunch", "--master-logger-level=debug", "airspace_service_provider", "asp_infrastructure.launch", "lighthouse_contract:=${LIGHTHOUSE_CONTRACT}", "eth_account_address:=${ETH_ADDRESS_ASP_MARIY_EL}", "asp_registry_address:=${RUSSIA_REGION_CONTRACT}", "asp_manifest_address:=${MARIY_EL_ASP_CONTRACT}"]
+    depends_on:
+      - parity
+      - ipfs
+    ports:
+      - "3422:22"
+    networks:
+      app_net:
+        ipv4_address: 172.18.18.9 # Temp fix, since go-ipfs does not accept URL as an API argument
+  kirov-asp:
+    image: distributed-sky
+    command: ["roslaunch", "--master-logger-level=debug", "airspace_service_provider", "asp_infrastructure.launch", "lighthouse_contract:=${LIGHTHOUSE_CONTRACT}", "eth_account_address:=${ETH_ADDRESS_ASP_KIROV}", "asp_registry_address:=${RUSSIA_REGION_CONTRACT}", "asp_manifest_address:=${KIROV_ASP_CONTRACT}"]
+    depends_on:
+      - parity
+      - ipfs
+    ports:
+      - "3522:22"
+    networks:
+      app_net:
+        ipv4_address: 172.18.18.10 # Temp fix, since go-ipfs does not accept URL as an API argument
 volumes:
   parity-db-kovan:
   parity-keystore:
