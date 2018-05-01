@@ -4,7 +4,7 @@ services:
     image: parity
     env_file:
      - ./.env
-    command: ["--chain", "kovan", "--db-path", "/chain-data/", "--ui-interface", "0.0.0.0", "--ws-interface", "0.0.0.0", "--ws-origins", "all", "--jsonrpc-hosts", "all", "--unsafe-expose", "--jsonrpc-interface", "0.0.0.0", "--force-ui", "--min-peers", "10", "--max-peers", "15", "--cache-size", "2048", "-d", "/keys-store/", "--unlock", "${ETH_ADDRESS_UAV},${ETH_ADDRESS_ASP_TATARSTAN},${ETH_LIGHTHOUSE_ADDRESS},${ETH_ADDRESS_ASP_MARIY_EL},${ETH_ADDRESS_ASP_KIROV}", "--password", "/unlock_password.txt"]
+    command: ["--chain", "kovan", "--db-path", "/chain-data/", "--ui-interface", "0.0.0.0", "--ws-interface", "0.0.0.0", "--ws-origins", "all", "--jsonrpc-hosts", "all", "--unsafe-expose", "--jsonrpc-interface", "0.0.0.0", "--force-ui", "--min-peers", "10", "--max-peers", "15", "--cache-size", "2048", "-d", "/keys-store/", "--unlock", "${ETH_ADDRESS_UAV},${ETH_ADDRESS_ASP_TATARSTAN},${ETH_LIGHTHOUSE_ADDRESS},${ETH_ADDRESS_ASP_MARIY_EL},${ETH_ADDRESS_ASP_KIROV},${ETH_ADDRESS_GLOBAL_PLANNER}", "--password", "/unlock_password.txt"]
     build:
       context: ./parity/
       args:
@@ -110,6 +110,29 @@ services:
     networks:
       app_net:
         ipv4_address: 172.18.18.10 # Temp fix, since go-ipfs does not accept URL as an API argument
+  global-planner:
+    image: distributed-sky
+    command: ["roslaunch", "--master-logger-level=debug", "global_planner", "global_planner_infrastructure.launch", "lighthouse_contract:=${LIGHTHOUSE_CONTRACT}", "eth_account_address:=${ETH_ADDRESS_GLOBAL_PLANNER}", "global_registry_address:=${GLOBAL_REGIONS_CONTRACT}"]
+    depends_on:
+      - parity
+      - ipfs
+    ports:
+      - "3622:22"
+    networks:
+      app_net:
+        ipv4_address: 172.18.18.11 # Temp fix, since go-ipfs does not accept URL as an API argument
+  web-visualiser:
+    image: distributed-sky
+    command: ["roslaunch", "--master-logger-level=debug", "web_visualiser", "web_visualiser_infrastructure.launch", "lighthouse_contract:=${LIGHTHOUSE_CONTRACT}", "address_aliases:=[{addr: '${ETH_ADDRESS_GLOBAL_PLANNER}', name: 'Global Planner'}, {addr: '${ETH_ADDRESS_ASP_KIROV}', name: 'ASP Kirov'}, {addr: '${ETH_ADDRESS_UAV}', name: 'UAV'}, {addr: '${ETH_ADDRESS_ASP_TATARSTAN}', name: 'ASP Tatarstan'}, {addr: '${ETH_ADDRESS_ASP_MARIY_EL}', name: 'ASP Mariy El'}]"]
+    depends_on:
+      - parity
+      - ipfs
+    ports:
+      - "3722:22"
+      - "8050:5000"
+    networks:
+      app_net:
+        ipv4_address: 172.18.18.12 # Temp fix, since go-ipfs does not accept URL as an API argument
 volumes:
   parity-db-kovan:
   parity-keystore:

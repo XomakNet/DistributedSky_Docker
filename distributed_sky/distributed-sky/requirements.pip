@@ -1,1 +1,16 @@
-shapely==1.6.4
+click==6.7
+eventlet==0.22.1
+Flask==1.0
+Flask-SocketIO==2.9.6
+geojson==2.3.0
+gevent==1.2.2
+gevent-websocket==0.10.1
+greenlet==0.4.13
+itsdangerous==0.24
+Jinja2==2.10
+MarkupSafe==1.0
+python-engineio==2.1.0
+python-socketio==1.9.0
+Shapely==1.6.4.post1
+six==1.11.0
+Werkzeug==0.14.1

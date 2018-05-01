@@ -5,6 +5,9 @@ RUN pip3 install --upgrade pip
 COPY requirements.pip .
 RUN pip3 install -r requirements.pip && rm requirements.pip
 
+# Fix for eventlet
+RUN apt-get update && apt-get -y -o Dpkg::Options::="--force-confmiss" install --reinstall netbase
+
 # Distributed sky package
 RUN apt-get install -y ros-lunar-geographic-msgs
 WORKDIR /
